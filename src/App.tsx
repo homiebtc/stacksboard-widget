@@ -3,12 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import { useWindowDimensions } from './hooks';
 import { Board } from './board';
-import { HalfBoard } from './halfBoard';
+import { BoardFraction } from './boardFraction';
 
 export type SlotInfo = {
   nftId: number;
   imageUrl: string;
 };
+
+export type BoardSizes = 'full' | 'half' | 'quarter' | null;
 
 const slotsQuery = `
   query GetAllSlots($contractName: String!) {
@@ -25,7 +27,9 @@ type Props = {
 
 const App: FC<Props> = ({ domElement }) => {
   const contractId = domElement.getAttribute('stacksboard-widget-contract')!;
-  const isHalfBoard = domElement.getAttribute('stacksboard-half-size');
+  const boardSize: BoardSizes = domElement.getAttribute(
+    'stacksboard-board-size',
+  ) as BoardSizes;
   const [slots, setSlots] = useState<SlotInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -73,11 +77,12 @@ const App: FC<Props> = ({ domElement }) => {
   } else if (error) {
     content = <div>Something went wrong. Please reload the page.</div>;
   } else {
-    content = !!isHalfBoard ? (
-      <HalfBoard allSlotInfo={slots} />
-    ) : (
-      <Board allSlotInfo={slots} />
-    );
+    content =
+      boardSize === null || boardSize === 'full' ? (
+        <Board allSlotInfo={slots} />
+      ) : (
+        <BoardFraction allSlotInfo={slots} boardSize={boardSize} />
+      );
   }
   return <div className="stacksboard-container">{content}</div>;
 };

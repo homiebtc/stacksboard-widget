@@ -6,7 +6,7 @@ type Props = {
   allSlotInfo: SlotInfo[];
 };
 
-const boardConfig = [
+export const BOARD_CONFIG = [
   Array.from({ length: 8 }).map((_, index) => index + 1),
   Array.from({ length: 16 }).map((_, index) => index + 9),
   Array.from({ length: 16 }).map((_, index) => index + 25),
@@ -15,7 +15,7 @@ const boardConfig = [
 export const Board: FC<Props> = ({ allSlotInfo }) => {
   return (
     <div className="stacksboard-board-container">
-      {boardConfig.map((row) => {
+      {BOARD_CONFIG.map((row) => {
         let rowEmpty = true;
         return (
           <div className="stacksboard-row-container">
