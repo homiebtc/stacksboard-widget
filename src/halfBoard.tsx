@@ -40,21 +40,33 @@ export const HalfBoard: FC<Props> = ({ allSlotInfo }) => {
         setCurrentBoardConfig((prev) =>
           prev === leftBoardConfig ? rightBoardConfig : leftBoardConfig,
         ),
-      1000,
+      2000,
     );
     return () => clearTimeout(timer);
   }, [currentBoardConfig, setCurrentBoardConfig]);
 
   return (
     <div className="stacksboard-board-container">
-      {currentBoardConfig.map((row) => (
-        <div className="stacksboard-row-container">
-          {row.map((i) => {
-            const slot = allSlotInfo.find((s) => s.nftId === i);
-            return <Slot slotInfo={slot} isXL={i <= 8} />;
-          })}
-        </div>
-      ))}
+      {currentBoardConfig.map((row) => {
+        let rowEmpty = true;
+        return (
+          <div className="stacksboard-row-container">
+            {row.map((nftId, i) => {
+              const slot = allSlotInfo.find((s) => s.nftId === nftId);
+              if (slot) {
+                rowEmpty = false;
+              }
+              return (
+                <Slot
+                  slotInfo={slot}
+                  isXL={nftId <= 8}
+                  rowEmpty={rowEmpty && i === row.length - 1}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
     </div>
   );
 };

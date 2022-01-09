@@ -6,45 +6,15 @@ import { Board } from './board';
 import { HalfBoard } from './halfBoard';
 
 export type SlotInfo = {
-  id: string;
-  contractName: string;
   nftId: number;
-  forSale: boolean;
-  minted: boolean;
-  price: number;
   imageUrl: string;
-  ownerName: string;
-  ownerUri: string;
-  description: string;
-  ownerAddress: string;
-  twitterHandle: string;
-  instagramHandle: string;
-  discordUri: string;
-  youtubeUri: string;
-  telegramUri: string;
-  baseNftId: number;
 };
 
 const slotsQuery = `
   query GetAllSlots($contractName: String!) {
     allSlots(contractName: $contractName) {
-      id
-      contractName
       nftId
-      forSale
-      minted
-      price
       imageUrl
-      ownerName
-      ownerUri
-      description
-      ownerAddress
-      twitterHandle
-      instagramHandle
-      discordUri
-      youtubeUri
-      telegramUri
-      baseNftId
     }
   }
     `;

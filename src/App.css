@@ -10,21 +10,12 @@
 
 .stacksboard-row-container {
   display: flex;
-  max-height: 144px;
 }
 
 .stacksboard-slot-container {
   border: 1px solid black;
   box-sizing: border-box;
   width: 100%;
-}
-
-.stacksboard-slot-img {
-  object-fit: cover;
-}
-
-.stacksboard-slot-available-container {
-  background: green;
 }
 
 .stacksboard-slot-img {

@@ -4,9 +4,10 @@ import type { SlotInfo } from './App';
 type Props = {
   slotInfo?: SlotInfo;
   isXL: boolean;
+  rowEmpty: boolean;
 };
 
-export const Slot: FC<Props> = ({ slotInfo, isXL }) => {
+export const Slot: FC<Props> = ({ slotInfo, isXL, rowEmpty }) => {
   const height = isXL ? `144px` : `72px`;
   const width = height;
 
@@ -20,7 +21,15 @@ export const Slot: FC<Props> = ({ slotInfo, isXL }) => {
           height: 'auto',
           backgroundColor: 'rgba(16, 185, 129, 1)',
         }}
-      />
+      >
+        {rowEmpty && (
+          <img
+            className="stacksboard-slot-img"
+            style={{ opacity: 0 }}
+            src={`https://via.placeholder.com/${height}`}
+          />
+        )}
+      </div>
     );
   }
 

@@ -15,14 +15,26 @@ const boardConfig = [
 export const Board: FC<Props> = ({ allSlotInfo }) => {
   return (
     <div className="stacksboard-board-container">
-      {boardConfig.map((row) => (
-        <div className="stacksboard-row-container">
-          {row.map((i) => {
-            const slot = allSlotInfo.find((s) => s.nftId === i);
-            return <Slot slotInfo={slot} isXL={i <= 8} />;
-          })}
-        </div>
-      ))}
+      {boardConfig.map((row) => {
+        let rowEmpty = true;
+        return (
+          <div className="stacksboard-row-container">
+            {row.map((nftId, i) => {
+              const slot = allSlotInfo.find((s) => s.nftId === nftId);
+              if (slot) {
+                rowEmpty = false;
+              }
+              return (
+                <Slot
+                  slotInfo={slot}
+                  isXL={nftId <= 8}
+                  rowEmpty={rowEmpty && i === row.length - 1}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
     </div>
   );
 };
