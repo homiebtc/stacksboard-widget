@@ -1,41 +1,109 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { useWindowDimensions } from './hooks';
+import { Board } from './board';
 
-interface AppProps {}
+export type SlotInfo = {
+  id: string;
+  contractName: string;
+  nftId: number;
+  forSale: boolean;
+  minted: boolean;
+  price: number;
+  imageUrl: string;
+  ownerName: string;
+  ownerUri: string;
+  description: string;
+  ownerAddress: string;
+  twitterHandle: string;
+  instagramHandle: string;
+  discordUri: string;
+  youtubeUri: string;
+  telegramUri: string;
+  baseNftId: number;
+};
 
-function App({}: AppProps) {
-  // Create the count state.
-  const [count, setCount] = useState(0);
-  // Create the counter (+1 every second).
+const slotsQuery = `
+  query GetAllSlots($contractName: String!) {
+    allSlots(contractName: $contractName) {
+      id
+      contractName
+      nftId
+      forSale
+      minted
+      price
+      imageUrl
+      ownerName
+      ownerUri
+      description
+      ownerAddress
+      twitterHandle
+      instagramHandle
+      discordUri
+      youtubeUri
+      telegramUri
+      baseNftId
+    }
+  }
+    `;
+
+type Props = {
+  domElement: Element;
+};
+
+const App: FC<Props> = ({ domElement }) => {
+  const contractId = domElement.getAttribute('stacksboard-widget-contract')!;
+  const [slots, setSlots] = useState<SlotInfo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const { width, height } = useWindowDimensions();
+
   useEffect(() => {
-    const timer = setTimeout(() => setCount(count + 1), 1000);
-    return () => clearTimeout(timer);
-  }, [count, setCount]);
-  // Return the App component.
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <p>
-          Page has been open for <code>{count}</code> seconds.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </p>
-      </header>
-    </div>
-  );
-}
+    const fetchSlots = async (contractId: string) => {
+      console.log('contractId', contractId);
+      const response = await window.fetch(
+        // 'https://www.stacksboard.art/api/graphql',
+        'http://localhost:3000/api/graphql',
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json;charset=UTF-8',
+          },
+          body: JSON.stringify({
+            query: slotsQuery,
+            variables: { contractName: contractId },
+          }),
+        },
+      );
+      const { data, errors } = await response.json();
+      console.log('data', data);
+      console.log('errors', errors);
+      if (response.ok) {
+        setSlots(data?.allSlots);
+      } else {
+        // handle the graphql errors
+        //   const error = new Error(
+        //     errors?.map((e: any) => e.message).join('\n') ?? 'unknown',
+        //   );
+        //   return Promise.reject(error);
+        setError(true);
+      }
+      setLoading(false);
+    };
+    fetchSlots(contractId);
+    setLoading(true);
+  }, []);
+
+  let content = null;
+  if (loading) {
+    content = <div>Loading...</div>;
+  } else if (error) {
+    content = <div>Something went wrong. Please reload the page.</div>;
+  } else {
+    content = <Board allSlotInfo={slots} />;
+  }
+  return <div>{content}</div>;
+};
 
 export default App;
