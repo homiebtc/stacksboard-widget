@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { useWindowDimensions } from './hooks';
 import { Board } from './board';
+import { HalfBoard } from './halfBoard';
 
 export type SlotInfo = {
   id: string;
@@ -54,6 +55,7 @@ type Props = {
 
 const App: FC<Props> = ({ domElement }) => {
   const contractId = domElement.getAttribute('stacksboard-widget-contract')!;
+  const isHalfBoard = domElement.getAttribute('stacksboard-half-size');
   const [slots, setSlots] = useState<SlotInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -101,9 +103,13 @@ const App: FC<Props> = ({ domElement }) => {
   } else if (error) {
     content = <div>Something went wrong. Please reload the page.</div>;
   } else {
-    content = <Board allSlotInfo={slots} />;
+    content = !!isHalfBoard ? (
+      <HalfBoard allSlotInfo={slots} />
+    ) : (
+      <Board allSlotInfo={slots} />
+    );
   }
-  return <div>{content}</div>;
+  return <div className="stacksboard-container">{content}</div>;
 };
 
 export default App;
