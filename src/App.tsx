@@ -37,6 +37,7 @@ const App: FC<Props> = ({ domElement }) => {
   let boardSize: BoardSizes = domElement.getAttribute(
     'stacksboard-widget-board-size',
   ) as BoardSizes;
+  let maxWidth = 1152;
   const [slots, setSlots] = useState<SlotInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -49,8 +50,13 @@ const App: FC<Props> = ({ domElement }) => {
       : stacksboardBaseUrl;
 
   if (width !== undefined && boardSize === null) {
-    if (width <= 144 * 3) boardSize = 'quarter';
-    else if (width <= 144 * 6) boardSize = 'half';
+    if (width <= 144 * 3) {
+      boardSize = 'quarter';
+      maxWidth = 1152 / 4;
+    } else if (width <= 144 * 6) {
+      boardSize = 'half';
+      maxWidth = 1152 / 2;
+    }
   }
 
   useEffect(() => {
@@ -97,7 +103,11 @@ const App: FC<Props> = ({ domElement }) => {
       <a
         href={stacksboardUrl}
         target="_blank"
-        style={{ display: 'inline-block', width: '100%', maxWidth: '1152px' }}
+        style={{
+          display: 'inline-block',
+          width: '100%',
+          maxWidth: `${maxWidth}px`,
+        }}
       >
         {content}
       </a>
