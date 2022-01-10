@@ -28,7 +28,7 @@ type Props = {
 const App: FC<Props> = ({ domElement }) => {
   const contractId = domElement.getAttribute('stacksboard-widget-contract')!;
   let boardSize: BoardSizes = domElement.getAttribute(
-    'stacksboard-board-size',
+    'stacksboard-widget-board-size',
   ) as BoardSizes;
   const [slots, setSlots] = useState<SlotInfo[]>([]);
   const [loading, setLoading] = useState(false);
