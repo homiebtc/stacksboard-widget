@@ -42,7 +42,6 @@ const QUARTER_BOARD_CONFIG = [
 ];
 
 export const BoardFraction: FC<Props> = ({ allSlotInfo, boardSize }) => {
-  console.log(boardSize);
   const [currBoardIndex, setCurrBoardIndex] = useState(0);
 
   const config =
@@ -58,26 +57,28 @@ export const BoardFraction: FC<Props> = ({ allSlotInfo, boardSize }) => {
 
   return (
     <div className="stacksboard-board-container">
-      {config[currBoardIndex].map((row) => {
-        let rowEmpty = true;
-        return (
-          <div className="stacksboard-row-container">
-            {row.map((nftId, i) => {
-              const slot = allSlotInfo.find((s) => s.nftId === nftId);
-              if (slot) {
-                rowEmpty = false;
-              }
-              return (
-                <Slot
-                  slotInfo={slot}
-                  isXL={nftId <= 8}
-                  rowEmpty={rowEmpty && i === row.length - 1}
-                />
-              );
-            })}
-          </div>
-        );
-      })}
+      {config[currBoardIndex < config.length ? currBoardIndex : 0].map(
+        (row) => {
+          let rowEmpty = true;
+          return (
+            <div className="stacksboard-row-container">
+              {row.map((nftId, i) => {
+                const slot = allSlotInfo.find((s) => s.nftId === nftId);
+                if (slot) {
+                  rowEmpty = false;
+                }
+                return (
+                  <Slot
+                    slotInfo={slot}
+                    isXL={nftId <= 8}
+                    rowEmpty={rowEmpty && i === row.length - 1}
+                  />
+                );
+              })}
+            </div>
+          );
+        },
+      )}
     </div>
   );
 };

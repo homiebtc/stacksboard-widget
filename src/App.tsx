@@ -27,48 +27,39 @@ type Props = {
 
 const App: FC<Props> = ({ domElement }) => {
   const contractId = domElement.getAttribute('stacksboard-widget-contract')!;
-  const boardSize: BoardSizes = domElement.getAttribute(
+  let boardSize: BoardSizes = domElement.getAttribute(
     'stacksboard-board-size',
   ) as BoardSizes;
   const [slots, setSlots] = useState<SlotInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
+
+  if (width !== undefined && boardSize === null) {
+    if (width <= 144 * 3) boardSize = 'quarter';
+    else if (width <= 144 * 6) boardSize = 'half';
+  }
 
   useEffect(() => {
-    const fetchSlots = async (contractId: string) => {
-      console.log('contractId', contractId);
-      const response = await window.fetch(
-        // 'https://www.stacksboard.art/api/graphql',
-        'http://localhost:3000/api/graphql',
-        {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json;charset=UTF-8',
-          },
-          body: JSON.stringify({
-            query: slotsQuery,
-            variables: { contractName: contractId },
-          }),
-        },
-      );
-      const { data, errors } = await response.json();
-      console.log('data', data);
-      console.log('errors', errors);
-      if (response.ok) {
-        setSlots(data?.allSlots);
-      } else {
-        // handle the graphql errors
-        //   const error = new Error(
-        //     errors?.map((e: any) => e.message).join('\n') ?? 'unknown',
-        //   );
-        //   return Promise.reject(error);
-        setError(true);
-      }
-      setLoading(false);
-    };
-    fetchSlots(contractId);
     setLoading(true);
+    window
+      .fetch('http://localhost:3000/api/graphql', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json;charset=UTF-8',
+        },
+        body: JSON.stringify({
+          query: slotsQuery,
+          variables: { contractName: contractId },
+        }),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setSlots(data?.data?.allSlots);
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   let content = null;
