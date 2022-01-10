@@ -3,9 +3,14 @@ import type { BoardSizes, SlotInfo } from './App';
 import { Slot } from './slot';
 import { BOARD_CONFIG } from './board';
 
+function randomInt(max: number) {
+  return Math.floor(Math.random() * (max + 1));
+}
+
 type Props = {
   allSlotInfo: SlotInfo[];
   boardSize: BoardSizes;
+  doNotRotateImages: boolean;
 };
 
 const HALF_1_BOARD_CONFIG = BOARD_CONFIG.map((row) =>
@@ -41,19 +46,27 @@ const QUARTER_BOARD_CONFIG = [
   QUARTER_4_BOARD_CONFIG,
 ];
 
-export const BoardFraction: FC<Props> = ({ allSlotInfo, boardSize }) => {
+export const BoardFraction: FC<Props> = ({
+  allSlotInfo,
+  boardSize,
+  doNotRotateImages,
+}) => {
   const [currBoardIndex, setCurrBoardIndex] = useState(0);
 
   const config =
     boardSize === 'half' ? HALF_BOARD_CONFIG : QUARTER_BOARD_CONFIG;
 
   useEffect(() => {
-    const timer = setTimeout(
-      () => setCurrBoardIndex((prev) => (prev + 1) % config.length),
-      2000,
-    );
-    return () => clearTimeout(timer);
-  }, [currBoardIndex, setCurrBoardIndex, config]);
+    if (!doNotRotateImages) {
+      const timer = setTimeout(
+        () => setCurrBoardIndex((prev) => (prev + 1) % config.length),
+        3000,
+      );
+      return () => clearTimeout(timer);
+    } else {
+      setCurrBoardIndex(randomInt(config.length));
+    }
+  }, [currBoardIndex, setCurrBoardIndex, config, doNotRotateImages]);
 
   return (
     <div className="stacksboard-board-container">

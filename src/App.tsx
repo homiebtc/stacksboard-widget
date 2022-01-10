@@ -30,6 +30,10 @@ const App: FC<Props> = ({ domElement }) => {
   let boardSize: BoardSizes = domElement.getAttribute(
     'stacksboard-widget-board-size',
   ) as BoardSizes;
+
+  const doNotRotateImages =
+    domElement.getAttribute('stacksboard-widget-rotate-images') === 'false';
+
   let maxWidth = 1152;
   const [slots, setSlots] = useState<SlotInfo[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,11 +46,14 @@ const App: FC<Props> = ({ domElement }) => {
   if (width !== undefined && boardSize === null) {
     if (width <= 144 * 3) {
       boardSize = 'quarter';
-      maxWidth = 1152 / 4;
     } else if (width <= 144 * 6) {
       boardSize = 'half';
-      maxWidth = 1152 / 2;
     }
+  }
+  if (boardSize === 'quarter') {
+    maxWidth = 1152 / 4;
+  } else if (boardSize === 'half') {
+    maxWidth = 1152 / 2;
   }
 
   useEffect(() => {
@@ -84,7 +91,11 @@ const App: FC<Props> = ({ domElement }) => {
       boardSize === null || boardSize === 'full' ? (
         <Board allSlotInfo={slots} />
       ) : (
-        <BoardFraction allSlotInfo={slots} boardSize={boardSize} />
+        <BoardFraction
+          allSlotInfo={slots}
+          boardSize={boardSize}
+          doNotRotateImages={doNotRotateImages}
+        />
       );
   }
   return (
