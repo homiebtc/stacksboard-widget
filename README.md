@@ -1,25 +1,48 @@
-# New Project
+# Stacksboard Widget
 
-> ✨ Bootstrapped with Create Snowpack App (CSA).
+[Demo](https://homiebtc.github.io/stacksboard-widget/)
 
-## Available Scripts
 
-### npm start
+This widget makes it easy to add a Stacksboard component to your website. Just add the following to your html: 
 
-Runs the app in the development mode.
-Open http://localhost:8080 to view it in the browser.
+```html
+    <div className="stacksboard_widget"
+        stacksboard-widget-contract="SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.crashpunks-board-slot"
+    ></div>
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+    <script type="module" src="https://cdn.jsdelivr.net/gh/homiebtc/stacksboard-widget@1.0.4/build/dist/index.js"></script>
 
-### npm run build
+    <link href="https://cdn.jsdelivr.net/gh/homiebtc/stacksboard-widget@1.0.4/build/dist/index.css" rel="stylesheet"/>
+```
 
-Builds a static copy of your site to the `build/` folder.
-Your app is ready to be deployed!
+## Props
 
-**For the best production performance:** Add a build bundler plugin like "@snowpack/plugin-webpack" to your `snowpack.config.mjs` config file.
+### `stacksboard-widget-contract` (required)
+Equal to the contract ID. Ex: `SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.crashpunks-board-slot`. You can find available board contracts at this address https://explorer.stacks.co/address/SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP?chain=mainnet. 
 
-### npm test
+Example:
+```html
+    <div className="stacksboard_widget"
+        stacksboard-widget-contract="SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.crashpunks-board-slot" ></div>
+```
 
-Launches the application test runner.
-Run with the `--watch` flag (`npm test -- --watch`) to run in interactive watch mode.
+### `stacksboard-widget-board-size` (optional)
+Available options: `'full' | 'half' | 'quarter' | null`. The board automatically resizes and picks an option based on the width of the application. If you specify an option here, it will override the automatic selection.
+
+Example:
+```html
+    <div class="stacksboard_widget" 
+        stacksboard-widget-contract="SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.crashpunks-board-slot"
+        stacksboard-widget-board-size="half" ></div>
+```
+
+### `stacksboard-widget-board-rotate-images` (optional)
+Set this equal to `"false"` if you do not want to switch out images when the board is `half` or `quarter`. The board does not switch out images when the board is full. The half / quarter is randomly selected on render, and does not change.
+
+
+Example:
+```html
+    <div class="stacksboard_widget" stacksboard-widget-contract="SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.megapont-board-slot"
+    stacksboard-widget-rotate-images="false"
+    stacksboard-widget-board-size="quarter"></div>
+```

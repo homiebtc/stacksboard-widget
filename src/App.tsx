@@ -1,5 +1,4 @@
 import React, { useState, useEffect, FC } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { useWindowDimensions } from './hooks';
 import { Board } from './board';
