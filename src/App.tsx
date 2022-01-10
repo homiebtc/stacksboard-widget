@@ -25,6 +25,13 @@ type Props = {
   domElement: Element;
 };
 
+const contractToCollectionName: Record<string, string> = {
+  'SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.crashpunks-board-slot':
+    'Crashpunks',
+  'SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.megapont-board-slot':
+    'MegapontApeClub',
+};
+
 const App: FC<Props> = ({ domElement }) => {
   const contractId = domElement.getAttribute('stacksboard-widget-contract')!;
   let boardSize: BoardSizes = domElement.getAttribute(
@@ -35,6 +42,12 @@ const App: FC<Props> = ({ domElement }) => {
   const [error, setError] = useState(false);
   const { width } = useWindowDimensions();
 
+  const stacksboardBaseUrl = 'https://www.stacksboard.art/';
+  const stacksboardUrl =
+    contractId in contractToCollectionName
+      ? `${stacksboardBaseUrl}/collection/${contractToCollectionName[contractId]}`
+      : stacksboardBaseUrl;
+
   if (width !== undefined && boardSize === null) {
     if (width <= 144 * 3) boardSize = 'quarter';
     else if (width <= 144 * 6) boardSize = 'half';
@@ -43,7 +56,7 @@ const App: FC<Props> = ({ domElement }) => {
   useEffect(() => {
     setLoading(true);
     window
-      .fetch('http://localhost:3000/api/graphql', {
+      .fetch('https://www.stacksboard.art/api/graphql', {
         method: 'POST',
         headers: {
           'content-type': 'application/json;charset=UTF-8',
@@ -64,9 +77,13 @@ const App: FC<Props> = ({ domElement }) => {
 
   let content = null;
   if (loading) {
-    content = <div>Loading...</div>;
+    content = <div className="stacksboard-placeholder">Loading...</div>;
   } else if (error) {
-    content = <div>Something went wrong. Please reload the page.</div>;
+    content = (
+      <div className="stacksboard-placeholder">
+        Something went wrong. Please reload the page.
+      </div>
+    );
   } else {
     content =
       boardSize === null || boardSize === 'full' ? (
@@ -75,7 +92,17 @@ const App: FC<Props> = ({ domElement }) => {
         <BoardFraction allSlotInfo={slots} boardSize={boardSize} />
       );
   }
-  return <div className="stacksboard-container">{content}</div>;
+  return (
+    <div className="stacksboard-container">
+      <a
+        href={stacksboardUrl}
+        target="_blank"
+        style={{ display: 'inline-block', width: '100%', maxWidth: '1152px' }}
+      >
+        {content}
+      </a>
+    </div>
+  );
 };
 
 export default App;
