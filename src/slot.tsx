@@ -27,6 +27,7 @@ export const Slot: FC<Props> = ({ slotInfo, isXL, rowEmpty }) => {
             className="stacksboard-slot-img"
             style={{ opacity: 0 }}
             src={`https://via.placeholder.com/${height}`}
+            alt=""
           />
         )}
       </div>
@@ -42,7 +43,7 @@ export const Slot: FC<Props> = ({ slotInfo, isXL, rowEmpty }) => {
         height: '100%',
       }}
     >
-      <img className="stacksboard-slot-img" src={slotInfo?.imageUrl} />
+      <img className="stacksboard-slot-img" src={slotInfo?.imageUrl} alt="" />
     </div>
   );
 };

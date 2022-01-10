@@ -18,8 +18,9 @@ export const Board: FC<Props> = ({ allSlotInfo }) => {
       <div className="stacksboard-board-overlay" />
       <div className="stacksboard-board-middle">
         <img
-          src="/logo-white.svg"
+          src="https://www.stacksboard.art/logo-white.svg"
           style={{ height: '24px', width: '24px', marginRight: '0.25rem' }}
+          alt=""
         />
         Stacksboard
       </div>
