@@ -57,6 +57,14 @@ export const BoardFraction: FC<Props> = ({ allSlotInfo, boardSize }) => {
 
   return (
     <div className="stacksboard-board-container">
+      <div className="stacksboard-board-overlay" />
+      <div className="stacksboard-board-middle">
+        <img
+          src="/logo-white.svg"
+          style={{ height: '24px', width: '24px', marginRight: '0.25rem' }}
+        />
+        Stacksboard
+      </div>
       {config[currBoardIndex < config.length ? currBoardIndex : 0].map(
         (row) => {
           let rowEmpty = true;

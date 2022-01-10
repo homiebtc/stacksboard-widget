@@ -1,6 +1,8 @@
 .stacksboard-container {
+  position: relative;
   height: 100%;
   width: 100%;
+  transition: 0.5s ease;
 }
 
 .stacksboard-placeholder {
@@ -14,6 +16,42 @@
 .stacksboard-board-container {
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.stacksboard-board-overlay {
+  position: absolute;
+  background-color: black;
+  opacity: 0;
+  transition: 0.5s ease;
+  width: 100%;
+  height: 100%;
+}
+
+.stacksboard-board-middle {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  font-size: large;
+  color: white;
+  border: white solid 1px;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stacksboard-board-container:hover .stacksboard-board-middle {
+  opacity: 1;
+}
+
+.stacksboard-board-container:hover .stacksboard-board-overlay {
+  opacity: 0.5;
 }
 
 .stacksboard-row-container {

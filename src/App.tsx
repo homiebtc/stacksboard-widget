@@ -25,13 +25,6 @@ type Props = {
   domElement: Element;
 };
 
-const contractToCollectionName: Record<string, string> = {
-  'SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.crashpunks-board-slot':
-    'Crashpunks',
-  'SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.megapont-board-slot':
-    'MegapontApeClub',
-};
-
 const App: FC<Props> = ({ domElement }) => {
   const contractId = domElement.getAttribute('stacksboard-widget-contract')!;
   let boardSize: BoardSizes = domElement.getAttribute(
@@ -44,10 +37,7 @@ const App: FC<Props> = ({ domElement }) => {
   const { width } = useWindowDimensions();
 
   const stacksboardBaseUrl = 'https://www.stacksboard.art/';
-  const stacksboardUrl =
-    contractId in contractToCollectionName
-      ? `${stacksboardBaseUrl}/collection/${contractToCollectionName[contractId]}`
-      : stacksboardBaseUrl;
+  const stacksboardUrl = `${stacksboardBaseUrl}collection/${contractId}`;
 
   if (width !== undefined && boardSize === null) {
     if (width <= 144 * 3) {
@@ -111,6 +101,7 @@ const App: FC<Props> = ({ domElement }) => {
       >
         {content}
       </a>
+      {/* <div className="stacksboard-container-middle">Stacksboard</div> */}
     </div>
   );
 };

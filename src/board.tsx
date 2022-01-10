@@ -15,6 +15,14 @@ export const BOARD_CONFIG = [
 export const Board: FC<Props> = ({ allSlotInfo }) => {
   return (
     <div className="stacksboard-board-container">
+      <div className="stacksboard-board-overlay" />
+      <div className="stacksboard-board-middle">
+        <img
+          src="/logo-white.svg"
+          style={{ height: '24px', width: '24px', marginRight: '0.25rem' }}
+        />
+        Stacksboard
+      </div>
       {BOARD_CONFIG.map((row) => {
         let rowEmpty = true;
         return (
