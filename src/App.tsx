@@ -3,6 +3,10 @@ import './App.css';
 import { useWindowDimensions } from './hooks';
 import { Board } from './board';
 import { BoardFraction } from './boardFraction';
+import { Stacksboard } from './stacksboard';
+
+const STACKSBOARD_COLLECTION_ID =
+  'SPGAKH27HF1T170QET72C727873H911BKNMPF8YB.stacks-board-slot';
 
 export type SlotInfo = {
   nftId: number;
@@ -39,8 +43,12 @@ const App: FC<Props> = ({ domElement }) => {
   const [error, setError] = useState(false);
   const { width } = useWindowDimensions();
 
+  const isStacksboard = STACKSBOARD_COLLECTION_ID === contractId;
+
   const stacksboardBaseUrl = 'https://www.stacksboard.art/';
-  const stacksboardUrl = `${stacksboardBaseUrl}collection/${contractId}`;
+  const stacksboardUrl = isStacksboard
+    ? stacksboardBaseUrl
+    : `${stacksboardBaseUrl}collection/${contractId}`;
 
   if (width !== undefined && boardSize === null) {
     if (width <= 144 * 3) {
@@ -49,10 +57,12 @@ const App: FC<Props> = ({ domElement }) => {
       boardSize = 'half';
     }
   }
-  if (boardSize === 'quarter') {
-    maxWidth = 1152 / 4;
-  } else if (boardSize === 'half') {
-    maxWidth = 1152 / 2;
+  if (!isStacksboard) {
+    if (boardSize === 'quarter') {
+      maxWidth = 1152 / 4;
+    } else if (boardSize === 'half') {
+      maxWidth = 1152 / 2;
+    }
   }
 
   useEffect(() => {
@@ -86,16 +96,17 @@ const App: FC<Props> = ({ domElement }) => {
       </div>
     );
   } else {
-    content =
-      boardSize === null || boardSize === 'full' ? (
-        <Board allSlotInfo={slots} />
-      ) : (
-        <BoardFraction
-          allSlotInfo={slots}
-          boardSize={boardSize}
-          doNotRotateImages={doNotRotateImages}
-        />
-      );
+    content = isStacksboard ? (
+      <Stacksboard allSlotInfo={slots} />
+    ) : boardSize === null || boardSize === 'full' ? (
+      <Board allSlotInfo={slots} />
+    ) : (
+      <BoardFraction
+        allSlotInfo={slots}
+        boardSize={boardSize}
+        doNotRotateImages={doNotRotateImages}
+      />
+    );
   }
   return (
     <div className="stacksboard-container">

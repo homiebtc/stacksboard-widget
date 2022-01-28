@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import type { BoardSizes, SlotInfo } from './App';
 import { Slot } from './slot';
 import { BOARD_CONFIG } from './board';
+import { TierOptions, TIERS } from './types';
 
 function randomInt(max: number) {
   return Math.floor(Math.random() * (max + 1));
@@ -69,7 +70,7 @@ export const BoardFraction: FC<Props> = ({
   }, [currBoardIndex, setCurrBoardIndex, config, doNotRotateImages]);
 
   return (
-    <div className="stacksboard-board-container">
+    <div className="stacksboard-board-container" style={{ height: 288 }}>
       <div className="stacksboard-board-overlay" />
       <div className="stacksboard-board-middle">
         <img
@@ -89,10 +90,17 @@ export const BoardFraction: FC<Props> = ({
                 if (slot) {
                   rowEmpty = false;
                 }
+                const { height, width } =
+                  TIERS[
+                    nftId <= 8
+                      ? TierOptions.Collectionxl
+                      : TierOptions.Collection
+                  ];
                 return (
                   <Slot
                     slotInfo={slot}
-                    isXL={nftId <= 8}
+                    height={height}
+                    width={width}
                     rowEmpty={rowEmpty && i === row.length - 1}
                   />
                 );

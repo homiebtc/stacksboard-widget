@@ -1,6 +1,5 @@
 .stacksboard-container {
   position: relative;
-  height: 288px;
   width: 100%;
   transition: 0.5s ease;
   display: flex;
@@ -74,7 +73,7 @@
 }
 
 .stacksboard-slot-img {
-  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  max-width: 100%;
 }

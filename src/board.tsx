@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import type { SlotInfo } from './App';
 import { Slot } from './slot';
+import { TierOptions, TIERS } from './types';
 
 type Props = {
   allSlotInfo: SlotInfo[];
@@ -14,7 +15,7 @@ export const BOARD_CONFIG = [
 
 export const Board: FC<Props> = ({ allSlotInfo }) => {
   return (
-    <div className="stacksboard-board-container">
+    <div className="stacksboard-board-container" style={{ height: 288 }}>
       <div className="stacksboard-board-overlay" />
       <div className="stacksboard-board-middle">
         <img
@@ -33,10 +34,15 @@ export const Board: FC<Props> = ({ allSlotInfo }) => {
               if (slot) {
                 rowEmpty = false;
               }
+              const { height, width } =
+                TIERS[
+                  nftId <= 8 ? TierOptions.Collectionxl : TierOptions.Collection
+                ];
               return (
                 <Slot
                   slotInfo={slot}
-                  isXL={nftId <= 8}
+                  height={height}
+                  width={width}
                   rowEmpty={rowEmpty && i === row.length - 1}
                 />
               );

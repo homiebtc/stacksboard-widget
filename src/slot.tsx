@@ -3,14 +3,12 @@ import type { SlotInfo } from './App';
 
 type Props = {
   slotInfo?: SlotInfo;
-  isXL: boolean;
+  height: number;
+  width: number;
   rowEmpty: boolean;
 };
 
-export const Slot: FC<Props> = ({ slotInfo, isXL, rowEmpty }) => {
-  const height = isXL ? `144px` : `72px`;
-  const width = height;
-
+export const Slot: FC<Props> = ({ slotInfo, height, width, rowEmpty }) => {
   if (!slotInfo) {
     return (
       <div
@@ -26,7 +24,7 @@ export const Slot: FC<Props> = ({ slotInfo, isXL, rowEmpty }) => {
           <img
             className="stacksboard-slot-img"
             style={{ opacity: 0 }}
-            src={`https://via.placeholder.com/${height}`}
+            src={`https://via.placeholder.com/${height}x${width}`}
             alt=""
           />
         )}
