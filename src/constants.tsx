@@ -56,3 +56,75 @@ export const TIERS: Record<TierOptions, TierInfo> = {
     height: 144,
   },
 };
+
+const HALF_1_COLLECTION_BOARD_CONFIG = COLLECTION_BOARD_CONFIG.map((row) =>
+  row.slice(0, row.length / 2),
+);
+
+const HALF_2_COLLECTION_BOARD_CONFIG = COLLECTION_BOARD_CONFIG.map((row) =>
+  row.slice(row.length / 2),
+);
+
+const QUARTER_1_COLLECTION_BOARD_CONFIG = HALF_1_COLLECTION_BOARD_CONFIG.map(
+  (row) => row.slice(0, row.length / 2),
+);
+
+const QUARTER_2_COLLECTION_BOARD_CONFIG = HALF_1_COLLECTION_BOARD_CONFIG.map(
+  (row) => row.slice(row.length / 2),
+);
+
+const QUARTER_3_COLLECTION_BOARD_CONFIG = HALF_2_COLLECTION_BOARD_CONFIG.map(
+  (row) => row.slice(0, row.length / 2),
+);
+
+const QUARTER_4_COLLECTION_BOARD_CONFIG = HALF_2_COLLECTION_BOARD_CONFIG.map(
+  (row) => row.slice(row.length / 2),
+);
+
+export const HALF_COLLECTION_BOARD_CONFIG = [
+  HALF_1_COLLECTION_BOARD_CONFIG,
+  HALF_2_COLLECTION_BOARD_CONFIG,
+];
+
+export const QUARTER_COLLECTION_BOARD_CONFIG = [
+  QUARTER_1_COLLECTION_BOARD_CONFIG,
+  QUARTER_2_COLLECTION_BOARD_CONFIG,
+  QUARTER_3_COLLECTION_BOARD_CONFIG,
+  QUARTER_4_COLLECTION_BOARD_CONFIG,
+];
+
+const HALF_1_STACKSBOARD_CONFIG = STACKSBOARD_CONFIG.map((row) =>
+  row.slice(0, row.length % 2 === 0 ? row.length / 2 : row.length / 2 + 1),
+);
+
+const HALF_2_STACKSBOARD_CONFIG = STACKSBOARD_CONFIG.map((row) =>
+  row.slice(row.length / 2),
+);
+
+const QUARTER_1_STACKSBOARD_CONFIG = HALF_1_STACKSBOARD_CONFIG.map((row) =>
+  row.slice(0, row.length % 2 === 0 ? row.length / 2 : row.length / 2 + 1),
+);
+
+const QUARTER_2_STACKSBOARD_CONFIG = HALF_1_STACKSBOARD_CONFIG.map((row) =>
+  row.slice(row.length / 2),
+);
+
+const QUARTER_3_STACKSBOARD_CONFIG = HALF_2_STACKSBOARD_CONFIG.map((row) =>
+  row.slice(0, row.length % 2 === 0 ? row.length / 2 : row.length / 2 + 1),
+);
+
+const QUARTER_4_STACKSBOARD_CONFIG = HALF_2_STACKSBOARD_CONFIG.map((row) =>
+  row.slice(row.length / 2),
+);
+
+export const HALF_STACKSBOARD_CONFIG = [
+  HALF_1_STACKSBOARD_CONFIG,
+  HALF_2_STACKSBOARD_CONFIG,
+];
+
+export const QUARTER_STACKSBOARD_CONFIG = [
+  QUARTER_1_STACKSBOARD_CONFIG,
+  QUARTER_2_STACKSBOARD_CONFIG,
+  QUARTER_3_STACKSBOARD_CONFIG,
+  QUARTER_4_STACKSBOARD_CONFIG,
+];

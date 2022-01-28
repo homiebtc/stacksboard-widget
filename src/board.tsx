@@ -11,13 +11,12 @@ import { TierOptions } from './types';
 
 type Props = {
   allSlotInfo: SlotInfo[];
-  isStacksBoard: boolean;
+  isStacksboard: boolean;
 };
 
-export const Board: FC<Props> = ({ allSlotInfo, isStacksBoard }) => {
-  const config = isStacksBoard ? STACKSBOARD_CONFIG : COLLECTION_BOARD_CONFIG;
-  const height = isStacksBoard ? 840 : 288;
-  console.log(config);
+export const Board: FC<Props> = ({ allSlotInfo, isStacksboard }) => {
+  const config = isStacksboard ? STACKSBOARD_CONFIG : COLLECTION_BOARD_CONFIG;
+  const height = isStacksboard ? 840 : 288;
   return (
     <div className="stacksboard-board-container" style={{ height }}>
       <div className="stacksboard-board-overlay" />
@@ -38,7 +37,7 @@ export const Board: FC<Props> = ({ allSlotInfo, isStacksBoard }) => {
               if (slot) {
                 rowEmpty = false;
               }
-              const { height, width } = isStacksBoard
+              const { height, width } = isStacksboard
                 ? TIERS[STACKSBOARD_ROW_TO_TIER[rowIndex]]
                 : TIERS[
                     nftId <= 8

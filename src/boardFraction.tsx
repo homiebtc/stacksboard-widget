@@ -1,7 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
 import type { BoardSizes, SlotInfo } from './App';
 import { Slot } from './slot';
-import { COLLECTION_BOARD_CONFIG, TIERS } from './constants';
+import {
+  COLLECTION_BOARD_CONFIG,
+  HALF_COLLECTION_BOARD_CONFIG,
+  HALF_STACKSBOARD_CONFIG,
+  QUARTER_COLLECTION_BOARD_CONFIG,
+  QUARTER_STACKSBOARD_CONFIG,
+  STACKSBOARD_ROW_TO_TIER,
+  TIERS,
+} from './constants';
 import { TierOptions } from './types';
 
 function randomInt(max: number) {
@@ -12,55 +20,27 @@ type Props = {
   allSlotInfo: SlotInfo[];
   boardSize: BoardSizes;
   doNotRotateImages: boolean;
+  isStacksboard: boolean;
 };
-
-const HALF_1_COLLECTION_BOARD_CONFIG = COLLECTION_BOARD_CONFIG.map((row) =>
-  row.slice(0, row.length / 2),
-);
-
-const HALF_2_COLLECTION_BOARD_CONFIG = COLLECTION_BOARD_CONFIG.map((row) =>
-  row.slice(row.length / 2),
-);
-
-const QUARTER_1_COLLECTION_BOARD_CONFIG = HALF_1_COLLECTION_BOARD_CONFIG.map(
-  (row) => row.slice(0, row.length / 2),
-);
-
-const QUARTER_2_COLLECTION_BOARD_CONFIG = HALF_1_COLLECTION_BOARD_CONFIG.map(
-  (row) => row.slice(row.length / 2),
-);
-
-const QUARTER_3_COLLECTION_BOARD_CONFIG = HALF_2_COLLECTION_BOARD_CONFIG.map(
-  (row) => row.slice(0, row.length / 2),
-);
-
-const QUARTER_4_COLLECTION_BOARD_CONFIG = HALF_2_COLLECTION_BOARD_CONFIG.map(
-  (row) => row.slice(row.length / 2),
-);
-
-const HALF_COLLECTION_BOARD_CONFIG = [
-  HALF_1_COLLECTION_BOARD_CONFIG,
-  HALF_2_COLLECTION_BOARD_CONFIG,
-];
-
-const QUARTER_COLLECTION_BOARD_CONFIG = [
-  QUARTER_1_COLLECTION_BOARD_CONFIG,
-  QUARTER_2_COLLECTION_BOARD_CONFIG,
-  QUARTER_3_COLLECTION_BOARD_CONFIG,
-  QUARTER_4_COLLECTION_BOARD_CONFIG,
-];
 
 export const BoardFraction: FC<Props> = ({
   allSlotInfo,
   boardSize,
   doNotRotateImages,
+  isStacksboard,
 }) => {
   const [currBoardIndex, setCurrBoardIndex] = useState(0);
 
-  const config =
-    boardSize === 'half'
-      ? HALF_COLLECTION_BOARD_CONFIG
-      : QUARTER_COLLECTION_BOARD_CONFIG;
+  const config = isStacksboard
+    ? boardSize === 'half'
+      ? HALF_STACKSBOARD_CONFIG
+      : QUARTER_STACKSBOARD_CONFIG
+    : boardSize === 'half'
+    ? HALF_COLLECTION_BOARD_CONFIG
+    : QUARTER_COLLECTION_BOARD_CONFIG;
+
+  const height = isStacksboard ? 840 : 288;
+  const maxWidth = boardSize === 'half' ? 576 : 288;
 
   useEffect(() => {
     if (!doNotRotateImages) {
@@ -75,7 +55,7 @@ export const BoardFraction: FC<Props> = ({
   }, [currBoardIndex, setCurrBoardIndex, config, doNotRotateImages]);
 
   return (
-    <div className="stacksboard-board-container" style={{ height: 288 }}>
+    <div className="stacksboard-board-container" style={{ height, maxWidth }}>
       <div className="stacksboard-board-overlay" />
       <div className="stacksboard-board-middle">
         <img
@@ -86,21 +66,22 @@ export const BoardFraction: FC<Props> = ({
         Stacksboard
       </div>
       {config[currBoardIndex < config.length ? currBoardIndex : 0].map(
-        (row) => {
+        (row, rowIndex) => {
           let rowEmpty = true;
           return (
-            <div className="stacksboard-row-container">
+            <div className="stacksboard-row-container" style={{ maxWidth }}>
               {row.map((nftId, i) => {
                 const slot = allSlotInfo.find((s) => s.nftId === nftId);
                 if (slot) {
                   rowEmpty = false;
                 }
-                const { height, width } =
-                  TIERS[
-                    nftId <= 8
-                      ? TierOptions.Collectionxl
-                      : TierOptions.Collection
-                  ];
+                const { height, width } = isStacksboard
+                  ? TIERS[STACKSBOARD_ROW_TO_TIER[rowIndex]]
+                  : TIERS[
+                      nftId <= 8
+                        ? TierOptions.Collectionxl
+                        : TierOptions.Collection
+                    ];
                 return (
                   <Slot
                     slotInfo={slot}

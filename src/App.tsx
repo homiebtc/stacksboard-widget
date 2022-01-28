@@ -56,12 +56,10 @@ const App: FC<Props> = ({ domElement }) => {
       boardSize = 'half';
     }
   }
-  if (!isStacksboard) {
-    if (boardSize === 'quarter') {
-      maxWidth = 1152 / 4;
-    } else if (boardSize === 'half') {
-      maxWidth = 1152 / 2;
-    }
+  if (boardSize === 'quarter') {
+    maxWidth = 1152 / 4;
+  } else if (boardSize === 'half') {
+    maxWidth = 1152 / 2;
   }
 
   useEffect(() => {
@@ -97,12 +95,13 @@ const App: FC<Props> = ({ domElement }) => {
   } else {
     content =
       boardSize === null || boardSize === 'full' ? (
-        <Board allSlotInfo={slots} isStacksBoard={isStacksboard} />
+        <Board allSlotInfo={slots} isStacksboard={isStacksboard} />
       ) : (
         <BoardFraction
           allSlotInfo={slots}
           boardSize={boardSize}
           doNotRotateImages={doNotRotateImages}
+          isStacksboard={isStacksboard}
         />
       );
   }
