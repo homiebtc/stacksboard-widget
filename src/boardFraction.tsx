@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import type { BoardSizes, SlotInfo } from './App';
 import { Slot } from './slot';
-import { BOARD_CONFIG } from './board';
-import { TierOptions, TIERS } from './types';
+import { COLLECTION_BOARD_CONFIG, TIERS } from './constants';
+import { TierOptions } from './types';
 
 function randomInt(max: number) {
   return Math.floor(Math.random() * (max + 1));
@@ -14,37 +14,40 @@ type Props = {
   doNotRotateImages: boolean;
 };
 
-const HALF_1_BOARD_CONFIG = BOARD_CONFIG.map((row) =>
+const HALF_1_COLLECTION_BOARD_CONFIG = COLLECTION_BOARD_CONFIG.map((row) =>
   row.slice(0, row.length / 2),
 );
 
-const HALF_2_BOARD_CONFIG = BOARD_CONFIG.map((row) =>
+const HALF_2_COLLECTION_BOARD_CONFIG = COLLECTION_BOARD_CONFIG.map((row) =>
   row.slice(row.length / 2),
 );
 
-const QUARTER_1_BOARD_CONFIG = HALF_1_BOARD_CONFIG.map((row) =>
-  row.slice(0, row.length / 2),
+const QUARTER_1_COLLECTION_BOARD_CONFIG = HALF_1_COLLECTION_BOARD_CONFIG.map(
+  (row) => row.slice(0, row.length / 2),
 );
 
-const QUARTER_2_BOARD_CONFIG = HALF_1_BOARD_CONFIG.map((row) =>
-  row.slice(row.length / 2),
+const QUARTER_2_COLLECTION_BOARD_CONFIG = HALF_1_COLLECTION_BOARD_CONFIG.map(
+  (row) => row.slice(row.length / 2),
 );
 
-const QUARTER_3_BOARD_CONFIG = HALF_2_BOARD_CONFIG.map((row) =>
-  row.slice(0, row.length / 2),
+const QUARTER_3_COLLECTION_BOARD_CONFIG = HALF_2_COLLECTION_BOARD_CONFIG.map(
+  (row) => row.slice(0, row.length / 2),
 );
 
-const QUARTER_4_BOARD_CONFIG = HALF_2_BOARD_CONFIG.map((row) =>
-  row.slice(row.length / 2),
+const QUARTER_4_COLLECTION_BOARD_CONFIG = HALF_2_COLLECTION_BOARD_CONFIG.map(
+  (row) => row.slice(row.length / 2),
 );
 
-const HALF_BOARD_CONFIG = [HALF_1_BOARD_CONFIG, HALF_2_BOARD_CONFIG];
+const HALF_COLLECTION_BOARD_CONFIG = [
+  HALF_1_COLLECTION_BOARD_CONFIG,
+  HALF_2_COLLECTION_BOARD_CONFIG,
+];
 
-const QUARTER_BOARD_CONFIG = [
-  QUARTER_1_BOARD_CONFIG,
-  QUARTER_2_BOARD_CONFIG,
-  QUARTER_3_BOARD_CONFIG,
-  QUARTER_4_BOARD_CONFIG,
+const QUARTER_COLLECTION_BOARD_CONFIG = [
+  QUARTER_1_COLLECTION_BOARD_CONFIG,
+  QUARTER_2_COLLECTION_BOARD_CONFIG,
+  QUARTER_3_COLLECTION_BOARD_CONFIG,
+  QUARTER_4_COLLECTION_BOARD_CONFIG,
 ];
 
 export const BoardFraction: FC<Props> = ({
@@ -55,7 +58,9 @@ export const BoardFraction: FC<Props> = ({
   const [currBoardIndex, setCurrBoardIndex] = useState(0);
 
   const config =
-    boardSize === 'half' ? HALF_BOARD_CONFIG : QUARTER_BOARD_CONFIG;
+    boardSize === 'half'
+      ? HALF_COLLECTION_BOARD_CONFIG
+      : QUARTER_COLLECTION_BOARD_CONFIG;
 
   useEffect(() => {
     if (!doNotRotateImages) {

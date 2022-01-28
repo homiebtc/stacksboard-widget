@@ -3,7 +3,6 @@ import './App.css';
 import { useWindowDimensions } from './hooks';
 import { Board } from './board';
 import { BoardFraction } from './boardFraction';
-import { Stacksboard } from './stacksboard';
 
 const STACKSBOARD_COLLECTION_ID =
   'SPGAKH27HF1T170QET72C727873H911BKNMPF8YB.stacks-board-slot';
@@ -96,17 +95,16 @@ const App: FC<Props> = ({ domElement }) => {
       </div>
     );
   } else {
-    content = isStacksboard ? (
-      <Stacksboard allSlotInfo={slots} />
-    ) : boardSize === null || boardSize === 'full' ? (
-      <Board allSlotInfo={slots} />
-    ) : (
-      <BoardFraction
-        allSlotInfo={slots}
-        boardSize={boardSize}
-        doNotRotateImages={doNotRotateImages}
-      />
-    );
+    content =
+      boardSize === null || boardSize === 'full' ? (
+        <Board allSlotInfo={slots} isStacksBoard={isStacksboard} />
+      ) : (
+        <BoardFraction
+          allSlotInfo={slots}
+          boardSize={boardSize}
+          doNotRotateImages={doNotRotateImages}
+        />
+      );
   }
   return (
     <div className="stacksboard-container">

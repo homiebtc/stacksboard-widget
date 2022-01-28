@@ -1,21 +1,25 @@
 import React, { FC } from 'react';
 import type { SlotInfo } from './App';
+import {
+  COLLECTION_BOARD_CONFIG,
+  STACKSBOARD_CONFIG,
+  STACKSBOARD_ROW_TO_TIER,
+  TIERS,
+} from './constants';
 import { Slot } from './slot';
-import { TierOptions, TIERS } from './types';
+import { TierOptions } from './types';
 
 type Props = {
   allSlotInfo: SlotInfo[];
+  isStacksBoard: boolean;
 };
 
-export const BOARD_CONFIG = [
-  Array.from({ length: 8 }).map((_, index) => index + 1),
-  Array.from({ length: 16 }).map((_, index) => index + 9),
-  Array.from({ length: 16 }).map((_, index) => index + 25),
-];
-
-export const Board: FC<Props> = ({ allSlotInfo }) => {
+export const Board: FC<Props> = ({ allSlotInfo, isStacksBoard }) => {
+  const config = isStacksBoard ? STACKSBOARD_CONFIG : COLLECTION_BOARD_CONFIG;
+  const height = isStacksBoard ? 840 : 288;
+  console.log(config);
   return (
-    <div className="stacksboard-board-container" style={{ height: 288 }}>
+    <div className="stacksboard-board-container" style={{ height }}>
       <div className="stacksboard-board-overlay" />
       <div className="stacksboard-board-middle">
         <img
@@ -25,7 +29,7 @@ export const Board: FC<Props> = ({ allSlotInfo }) => {
         />
         Stacksboard
       </div>
-      {BOARD_CONFIG.map((row) => {
+      {config.map((row, rowIndex) => {
         let rowEmpty = true;
         return (
           <div className="stacksboard-row-container">
@@ -34,10 +38,13 @@ export const Board: FC<Props> = ({ allSlotInfo }) => {
               if (slot) {
                 rowEmpty = false;
               }
-              const { height, width } =
-                TIERS[
-                  nftId <= 8 ? TierOptions.Collectionxl : TierOptions.Collection
-                ];
+              const { height, width } = isStacksBoard
+                ? TIERS[STACKSBOARD_ROW_TO_TIER[rowIndex]]
+                : TIERS[
+                    nftId <= 8
+                      ? TierOptions.Collectionxl
+                      : TierOptions.Collection
+                  ];
               return (
                 <Slot
                   slotInfo={slot}
