@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import type { SlotInfo } from './App';
 
 type Props = {
@@ -6,9 +6,19 @@ type Props = {
   height: number;
   width: number;
   rowEmpty: boolean;
+  isStacksboard: boolean;
 };
 
-export const Slot: FC<Props> = ({ slotInfo, height, width, rowEmpty }) => {
+export const Slot: FC<Props> = ({
+  slotInfo,
+  height,
+  width,
+  rowEmpty,
+  isStacksboard,
+}) => {
+  const [triedCdn, setTriedCdn] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
   if (!slotInfo) {
     return (
       <div
@@ -32,6 +42,17 @@ export const Slot: FC<Props> = ({ slotInfo, height, width, rowEmpty }) => {
     );
   }
 
+  let imageUrl = slotInfo?.imageUrl;
+  if (
+    !slotInfo?.isGif &&
+    !slotInfo.imageUrl.includes('.gif') &&
+    !triedCdn &&
+    slotInfo.imgixImageUrl &&
+    isStacksboard
+  ) {
+    imageUrl = slotInfo?.imgixImageUrl;
+  }
+
   return (
     <div
       className="stacksboard-slot-container"
@@ -41,7 +62,19 @@ export const Slot: FC<Props> = ({ slotInfo, height, width, rowEmpty }) => {
         height: '100%',
       }}
     >
-      <img className="stacksboard-slot-img" src={slotInfo?.imageUrl} alt="" />
+      <img
+        className="stacksboard-slot-img"
+        src={imageUrl}
+        // src={slotInfo?.imageUrl}
+        onError={() => {
+          if (!triedCdn) {
+            setTriedCdn(true);
+          }
+        }}
+        alt=""
+        onLoad={() => setLoaded(true)}
+        style={{ opacity: loaded ? 1 : 0 }}
+      />
     </div>
   );
 };

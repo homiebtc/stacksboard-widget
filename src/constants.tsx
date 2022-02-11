@@ -42,6 +42,12 @@ export const STACKSBOARD_ROW_TO_TIER = [
   TierOptions.Bronze,
 ];
 
+export const COLLECTION_BOARD_ROW_TO_TIER = [
+  TierOptions.Collectionxl,
+  TierOptions.Collection,
+  TierOptions.Collection,
+];
+
 export const TIERS: Record<TierOptions, TierInfo> = {
   BRONZE: { width: 24, height: 24 },
   SILVER: { width: 48, height: 48 },

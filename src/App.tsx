@@ -10,6 +10,8 @@ const STACKSBOARD_COLLECTION_ID =
 export type SlotInfo = {
   nftId: number;
   imageUrl: string;
+  imgixImageUrl: string;
+  isGif: boolean;
 };
 
 export type BoardSizes = 'full' | 'half' | 'quarter' | null;
@@ -19,6 +21,8 @@ const slotsQuery = `
     allSlots(contractName: $contractName) {
       nftId
       imageUrl
+      imgixImageUrl
+      isGif
     }
   }
     `;
@@ -78,6 +82,7 @@ const App: FC<Props> = ({ domElement }) => {
       .then((response) => response.json())
       .then((data) => {
         setSlots(data?.data?.allSlots);
+        console.log(data);
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));

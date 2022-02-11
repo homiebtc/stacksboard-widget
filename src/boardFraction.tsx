@@ -53,6 +53,9 @@ export const BoardFraction: FC<Props> = ({
       setCurrBoardIndex(randomInt(config.length));
     }
   }, [currBoardIndex, setCurrBoardIndex, config, doNotRotateImages]);
+  if (!allSlotInfo) {
+    return null;
+  }
 
   return (
     <div className="stacksboard-board-container" style={{ height, maxWidth }}>
@@ -88,6 +91,7 @@ export const BoardFraction: FC<Props> = ({
                     height={height}
                     width={width}
                     rowEmpty={rowEmpty && i === row.length - 1}
+                    isStacksboard={isStacksboard}
                   />
                 );
               })}

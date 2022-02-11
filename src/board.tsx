@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import type { SlotInfo } from './App';
 import {
   COLLECTION_BOARD_CONFIG,
+  COLLECTION_BOARD_ROW_TO_TIER,
   STACKSBOARD_CONFIG,
   STACKSBOARD_ROW_TO_TIER,
   TIERS,
@@ -17,6 +18,9 @@ type Props = {
 export const Board: FC<Props> = ({ allSlotInfo, isStacksboard }) => {
   const config = isStacksboard ? STACKSBOARD_CONFIG : COLLECTION_BOARD_CONFIG;
   const height = isStacksboard ? 840 : 288;
+  if (!allSlotInfo) {
+    return null;
+  }
   return (
     <div className="stacksboard-board-container" style={{ height }}>
       <div className="stacksboard-board-overlay" />
@@ -30,26 +34,25 @@ export const Board: FC<Props> = ({ allSlotInfo, isStacksboard }) => {
       </div>
       {config.map((row, rowIndex) => {
         let rowEmpty = true;
+
+        const { height, width } = isStacksboard
+          ? TIERS[STACKSBOARD_ROW_TO_TIER[rowIndex]]
+          : TIERS[COLLECTION_BOARD_ROW_TO_TIER[rowIndex]];
+
         return (
-          <div className="stacksboard-row-container">
+          <div className="stacksboard-row-container" style={{ height }}>
             {row.map((nftId, i) => {
               const slot = allSlotInfo.find((s) => s.nftId === nftId);
               if (slot) {
                 rowEmpty = false;
               }
-              const { height, width } = isStacksboard
-                ? TIERS[STACKSBOARD_ROW_TO_TIER[rowIndex]]
-                : TIERS[
-                    nftId <= 8
-                      ? TierOptions.Collectionxl
-                      : TierOptions.Collection
-                  ];
               return (
                 <Slot
                   slotInfo={slot}
                   height={height}
                   width={width}
                   rowEmpty={rowEmpty && i === row.length - 1}
+                  isStacksboard={isStacksboard}
                 />
               );
             })}
