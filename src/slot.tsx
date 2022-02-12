@@ -17,6 +17,7 @@ export const Slot: FC<Props> = ({
   isStacksboard,
 }) => {
   const [triedCdn, setTriedCdn] = useState(false);
+  const [triedImage, setTriedImage] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   if (!slotInfo) {
@@ -51,6 +52,8 @@ export const Slot: FC<Props> = ({
     isStacksboard
   ) {
     imageUrl = slotInfo?.imgixImageUrl;
+  } else if (triedImage) {
+    imageUrl = 'https://www.stacksboard.art/logo-black.png';
   }
 
   return (
@@ -69,6 +72,8 @@ export const Slot: FC<Props> = ({
         onError={() => {
           if (!triedCdn) {
             setTriedCdn(true);
+          } else if (!triedImage) {
+            setTriedImage(true);
           }
         }}
         alt=""
