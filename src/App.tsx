@@ -82,7 +82,6 @@ const App: FC<Props> = ({ domElement }) => {
       .then((response) => response.json())
       .then((data) => {
         setSlots(data?.data?.allSlots);
-        console.log(data);
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
