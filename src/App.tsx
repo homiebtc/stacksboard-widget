@@ -98,7 +98,9 @@ const App: FC<Props> = ({ domElement }) => {
   }, []);
 
   let content = null;
-  if (loading || (slots && slots.length === 0)) {
+  if (!slots) {
+    content = null;
+  } else if (loading || slots.length === 0) {
     content = <div className="stacksboard-placeholder">Loading...</div>;
   } else if (error) {
     content = (
@@ -119,6 +121,7 @@ const App: FC<Props> = ({ domElement }) => {
         />
       );
   }
+
   return (
     <div className="stacksboard-container">
       <a
@@ -132,7 +135,6 @@ const App: FC<Props> = ({ domElement }) => {
       >
         {content}
       </a>
-      {/* <div className="stacksboard-container-middle">Stacksboard</div> */}
     </div>
   );
 };
