@@ -88,7 +88,7 @@ const App: FC<Props> = ({ domElement }) => {
   }, []);
 
   let content = null;
-  if (loading) {
+  if (loading || slots.length === 0) {
     content = <div className="stacksboard-placeholder">Loading...</div>;
   } else if (error) {
     content = (
