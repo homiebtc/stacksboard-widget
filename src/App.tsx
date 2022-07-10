@@ -108,7 +108,7 @@ const App: FC<Props> = ({ domElement }) => {
         Something went wrong. Please reload the page.
       </div>
     );
-  } else {
+  } else if (slots.length > 0) {
     content =
       boardSize === null || boardSize === 'full' ? (
         <Board allSlotInfo={slots} isStacksboard={isStacksboard} />
