@@ -66,7 +66,7 @@ const App: FC<Props> = ({ domElement }) => {
     maxWidth = 1152 / 2;
   }
 
-  useEffect(() => {
+  const fetchData = () => {
     setLoading(true);
     window
       .fetch('https://www.stacksboard.art/api/graphql', {
@@ -81,14 +81,24 @@ const App: FC<Props> = ({ domElement }) => {
       })
       .then((response) => response.json())
       .then((data) => {
-        setSlots(data?.data?.allSlots);
+        setSlots(data?.data?.allSlots ?? []);
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchData();
+    // if still no data, refetch data once
+    setTimeout(() => {
+      if (slots && slots.length === 0) {
+        fetchData();
+      }
+    }, 2000);
   }, []);
 
   let content = null;
-  if (loading || slots.length === 0) {
+  if (loading || (slots && slots.length === 0)) {
     content = <div className="stacksboard-placeholder">Loading...</div>;
   } else if (error) {
     content = (
