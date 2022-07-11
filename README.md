@@ -10,9 +10,9 @@ This widget makes it easy to add a Stacksboard component to your website. Just a
     stacksboard-widget-contract="SP1F6E7S7SEZZ2R2VHCY0BYJ2G81CCSSJ7PC4SSHP.crashpunks-board-slot"
 ></div>
 
-<script type="module" src="https://cdn.jsdelivr.net/gh/homiebtc/stacksboard-widget@1.0.14/build/dist/index.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/homiebtc/stacksboard-widget@1.0.18/build/dist/index.js"></script>
 
-<link href="https://cdn.jsdelivr.net/gh/homiebtc/stacksboard-widget@1.0.14/build/dist/index.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/homiebtc/stacksboard-widget@1.0.18/build/dist/index.css" rel="stylesheet"/>
 ```
 
 ## Props
