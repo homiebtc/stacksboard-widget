@@ -95,14 +95,17 @@ const App: FC<Props> = ({ domElement }) => {
     pRetry(fetchData, { retries: 3 }).finally(() => setLoading(false));
   }, []);
 
+  const className = isStacksboard
+    ? 'stacksboard-placeholder'
+    : 'collectionboard-placeholder';
   let content = null;
   if (!slots) {
     content = null;
   } else if (loading || slots.length === 0) {
-    content = <div className="stacksboard-placeholder">Loading...</div>;
+    content = <div className={className}>Loading...</div>;
   } else if (error) {
     content = (
-      <div className="stacksboard-placeholder">
+      <div className={className}>
         Something went wrong. Please reload the page.
       </div>
     );
