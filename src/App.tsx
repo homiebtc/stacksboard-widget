@@ -1,8 +1,9 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect, FC, useCallback } from 'react';
 import './App.css';
 import { useWindowDimensions } from './hooks';
 import { Board } from './board';
 import { BoardFraction } from './boardFraction';
+import pRetry from 'p-retry';
 
 const STACKSBOARD_COLLECTION_ID =
   'SPGAKH27HF1T170QET72C727873H911BKNMPF8YB.stacks-board-slot';
@@ -44,6 +45,7 @@ const App: FC<Props> = ({ domElement }) => {
   const [slots, setSlots] = useState<SlotInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [fetched, setFetched] = useState(false);
   const { width } = useWindowDimensions();
 
   const isStacksboard = STACKSBOARD_COLLECTION_ID === contractId;
@@ -88,13 +90,7 @@ const App: FC<Props> = ({ domElement }) => {
   };
 
   useEffect(() => {
-    fetchData();
-    // if still no data, refetch data once
-    setTimeout(() => {
-      if (slots && slots.length === 0) {
-        fetchData();
-      }
-    }, 2000);
+    pRetry(fetchData, { retries: 3 });
   }, []);
 
   let content = null;
@@ -108,7 +104,7 @@ const App: FC<Props> = ({ domElement }) => {
         Something went wrong. Please reload the page.
       </div>
     );
-  } else if (slots.length > 0) {
+  } else {
     content =
       boardSize === null || boardSize === 'full' ? (
         <Board allSlotInfo={slots} isStacksboard={isStacksboard} />
