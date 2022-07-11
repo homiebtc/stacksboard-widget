@@ -70,29 +70,33 @@ const App: FC<Props> = ({ domElement }) => {
 
   const fetchData = async () => {
     setLoading(true);
-    const response = await window.fetch(
-      'https://www.stacksboard.art/api/graphql',
-      {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json;charset=UTF-8',
+    try {
+      const response = await window.fetch(
+        'https://www.stacksboard.art/api/graphql',
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json;charset=UTF-8',
+          },
+          body: JSON.stringify({
+            query: slotsQuery,
+            variables: { contractName: contractId },
+          }),
         },
-        body: JSON.stringify({
-          query: slotsQuery,
-          variables: { contractName: contractId },
-        }),
-      },
-    );
-    const data = await response.json();
-    if (data?.data?.allSlots) {
-      setSlots(data.data.allSlots);
-    } else {
-      throw new AbortError(response.statusText);
+      );
+      const data = await response.json();
+      if (data?.data?.allSlots) {
+        setSlots(data.data.allSlots);
+      } else {
+        throw new AbortError(response.statusText);
+      }
+    } catch {
+      throw new AbortError('error');
     }
   };
 
   useEffect(() => {
-    pRetry(fetchData, { retries: 3 }).finally(() => setLoading(false));
+    pRetry(fetchData, { retries: 5 }).finally(() => setLoading(false));
   }, []);
 
   const className = isStacksboard
