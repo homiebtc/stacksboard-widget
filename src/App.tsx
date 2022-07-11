@@ -3,7 +3,7 @@ import './App.css';
 import { useWindowDimensions } from './hooks';
 import { Board } from './board';
 import { BoardFraction } from './boardFraction';
-import pRetry from 'p-retry';
+import pRetry, { AbortError } from 'p-retry';
 
 const STACKSBOARD_COLLECTION_ID =
   'SPGAKH27HF1T170QET72C727873H911BKNMPF8YB.stacks-board-slot';
@@ -68,10 +68,11 @@ const App: FC<Props> = ({ domElement }) => {
     maxWidth = 1152 / 2;
   }
 
-  const fetchData = () => {
+  const fetchData = async () => {
     setLoading(true);
-    window
-      .fetch('https://www.stacksboard.art/api/graphql', {
+    const response = await window.fetch(
+      'https://www.stacksboard.art/api/graphql',
+      {
         method: 'POST',
         headers: {
           'content-type': 'application/json;charset=UTF-8',
@@ -80,17 +81,18 @@ const App: FC<Props> = ({ domElement }) => {
           query: slotsQuery,
           variables: { contractName: contractId },
         }),
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        setSlots(data?.data?.allSlots ?? []);
-      })
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
+      },
+    );
+    const data = await response.json();
+    if (data?.data?.allSlots) {
+      setSlots(data.data.allSlots);
+    } else {
+      throw new AbortError(response.statusText);
+    }
   };
 
   useEffect(() => {
-    pRetry(fetchData, { retries: 3 });
+    pRetry(fetchData, { retries: 3 }).finally(() => setLoading(false));
   }, []);
 
   let content = null;
