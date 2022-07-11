@@ -96,7 +96,9 @@ const App: FC<Props> = ({ domElement }) => {
   };
 
   useEffect(() => {
-    pRetry(fetchData, { retries: 5 }).finally(() => setLoading(false));
+    pRetry(fetchData, { retries: 5 })
+      .catch((e) => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   const className = isStacksboard
